@@ -6,18 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Meta CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="bg-gradient-to-br from-gray-900 via-blue-800 to-gray-600 h-screen flex items-center justify-center">
     <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
         <div class="text-center">
             <h1 class="text-2xl font-bold text-gray-800 mb-4">Login</h1>
-            <img class="mx-auto w-28 h-28 w-auto mb-4" src="https://i.pinimg.com/474x/ec/fb/cc/ecfbcc8e62cbd0e18b4de89960ecb606.jpg" alt="logo">
+            <img class="mx-auto w-28 h-28 mb-4" src="https://i.pinimg.com/474x/ec/fb/cc/ecfbcc8e62cbd0e18b4de89960ecb606.jpg" alt="logo">
             <p class="text-gray-600 mb-6">Please login to your account.</p>
         </div>
 
-        <form action="{{ route('login') }}" method="POST" class="space-y-4">
+        <!-- Form login dengan CSRF token -->
+        <form id="login-form" action="{{ route('login') }}" method="POST" class="space-y-4">
             @csrf
+            <input type="hidden" name="_token" value="{{ csrf_token() }}"> <!-- CSRF Token -->
+
             <div>
                 <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
                 <input type="text" id="username" name="username" required
@@ -53,6 +59,16 @@
         document.getElementById('show-password').addEventListener('change', function() {
             const passwordInput = document.getElementById('password');
             passwordInput.type = this.checked ? 'text' : 'password';
+        });
+
+        // Menambahkan CSRF Token ke dalam form saat submit
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+            const hiddenToken = document.createElement("input");
+            hiddenToken.type = "hidden";
+            hiddenToken.name = "_token";
+            hiddenToken.value = token;
+            this.appendChild(hiddenToken);
         });
     </script>
 </body>

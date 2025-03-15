@@ -70,7 +70,7 @@ class LoginRequest extends FormRequest
                 redirect()->intended('/kc/dashboard')->send();
                 break;
             case 'supervisor':
-                redirect()->intended('/kc/dashboard')->send(); // Bisa disesuaikan jika supervisor punya halaman berbeda
+                redirect()->intended('/spv/dashboard')->send(); // Bisa disesuaikan jika supervisor punya halaman berbeda
                 break;
             case 'salesman':
                 redirect()->intended('/sales/dashboard')->send();

@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * Menampilkan halaman login.
+     */
+    public function create()
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * Memproses login user.
+     */
     public function store(Request $request)
     {
         $credentials = $request->validate([
@@ -26,20 +37,20 @@ class AuthenticatedSessionController extends Controller
         return $this->redirectToDashboard();
     }
 
-    private function redirectToDashboard()
+    /**
+     * Mengarahkan user ke dashboard berdasarkan role.
+     */
+    public function redirectToDashboard()
     {
-        $user = Auth::user();
+        $role = auth()->user()->role;
 
-        if ($user->hasRole('admin')) {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->hasRole('kepala_cabang')) {
-            return redirect()->route('kc.dashboard');
-        } elseif ($user->hasRole('supervisor')) {
-            return redirect()->route('spv.dashboard');
-        } elseif ($user->hasRole('salesman')) {
-            return redirect()->route('sales.dashboard');
-        }
-
-        return redirect()->route('dashboard');
+        return match ($role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'kepala_cabang' => redirect()->route('kc.dashboard'),
+            'supervisor' => redirect()->route('spv.dashboard'),
+            'salesman' => redirect()->route('sales.dashboard'),
+            default => redirect('/'),
+        };
     }
+
 }

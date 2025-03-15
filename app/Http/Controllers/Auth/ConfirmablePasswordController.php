@@ -43,7 +43,7 @@ class ConfirmablePasswordController extends Controller
         } elseif ($user->hasRole('kepala_cabang')) {
             return redirect()->route('kepala_cabang.dashboard');
         } elseif ($user->hasRole('supervisor')) {
-            return redirect()->route('supervisor.dashboard');
+            return redirect()->route('spv.dashboard');
         } elseif ($user->hasRole('salesman')) {
             return redirect()->route('salesman.dashboard');
         }

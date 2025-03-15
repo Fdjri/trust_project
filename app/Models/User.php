@@ -28,4 +28,9 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'id_cabang', 'id');
+    }
 }

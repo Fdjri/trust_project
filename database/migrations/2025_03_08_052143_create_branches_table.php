@@ -26,4 +26,9 @@ return new class extends Migration
     {
         Schema::dropIfExists('branches');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'id_cabang', 'id');
+    }
 };
