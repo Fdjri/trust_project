@@ -8,17 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Menampilkan halaman login.
-     */
     public function create()
     {
         return view('auth.login');
     }
 
-    /**
-     * Memproses login user.
-     */
     public function store(Request $request)
     {
         $credentials = $request->validate([
@@ -37,20 +31,30 @@ class AuthenticatedSessionController extends Controller
         return $this->redirectToDashboard();
     }
 
-    /**
-     * Mengarahkan user ke dashboard berdasarkan role.
-     */
     public function redirectToDashboard()
     {
-        $role = auth()->user()->role;
+        $user = Auth::user();
 
-        return match ($role) {
-            'admin' => redirect()->route('admin.dashboard'),
-            'kepala_cabang' => redirect()->route('kc.dashboard'),
-            'supervisor' => redirect()->route('spv.dashboard'),
-            'salesman' => redirect()->route('sales.dashboard'),
-            default => redirect('/'),
-        };
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->role === 'kepala_cabang') {
+            return redirect()->route('kc.dashboard');
+        } elseif ($user->role === 'supervisor') {
+            return redirect()->route('spv.dashboard');
+        } elseif ($user->role === 'salesman') {
+            return redirect()->route('sales.dashboard');
+        }
+
+        return redirect()->route('dashboard');
     }
 
+    public function destroy(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
 }
