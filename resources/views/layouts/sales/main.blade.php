@@ -166,7 +166,7 @@
 
                 <li class="flex items-center">
                     <a href="" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500">
-                        <img class="w-8 h-8 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="https://i.pinimg.com/474x/c7/9a/37/c79a37e13ef14be556b51143bcbb1b01.jpg" alt="foto profil">
+                        <img class="w-8 h-8 p-1 rounded-full ring-2 ring-gray-300" src="https://i.pinimg.com/474x/c7/9a/37/c79a37e13ef14be556b51143bcbb1b01.jpg" alt="foto profil">
                     </a>
                 </li>
             </ul>

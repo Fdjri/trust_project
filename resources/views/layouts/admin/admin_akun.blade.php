@@ -14,8 +14,8 @@
             </div>
 
             <div class="flex items-center justify-between mb-4">
-                <button type="button" class="flex items-center gap-x-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-3 py-2 text-center me-2">
-                    <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <button type="button" class="flex items-center gap-x-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center me-2">
+                    <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                     <span class="font-semibold">Tambah</span>
@@ -266,7 +266,7 @@
 
     <footer class="pt-2">
         <div class="flex flex-col items-end px-6 py-3">
-            <span class="text-sm text-gray-700 dark:text-gray-400 mb-2">
+            <span class="text-sm text-gray-700 mb-2">
                 Showing <span class="font-semibold text-gray-700">1</span> to
                 <span class="font-semibold text-gray-700">10</span> of
                 <span class="font-semibold text-gray-700">100</span> Entries

@@ -219,7 +219,7 @@
 
     <footer class="pt-2">
         <div class="flex flex-col items-end px-6 py-3">
-            <span class="text-sm text-gray-700 dark:text-gray-400 mb-2">
+            <span class="text-sm text-gray-700 mb-2">
                 Showing <span class="font-semibold text-gray-700">1</span> to
                 <span class="font-semibold text-gray-700">10</span> of
                 <span class="font-semibold text-gray-700">100</span> Entries
