@@ -8,7 +8,9 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id('id_customer'); // ID pelanggan sebagai primary key
+            $table->id('id_customer');
+            $table->unsignedBigInteger('branch_id');
+            $table->unsignedBigInteger('salesman_id')->nullable();
             $table->string('nama');
             $table->text('alamat')->nullable();
             $table->string('nomor_hp_1');
@@ -21,17 +23,18 @@ return new class extends Migration {
             $table->enum('tipe_pelanggan', ['first buyer', 'replacement', 'additional'])->nullable();
             $table->enum('jenis_pelanggan', ['retail', 'fleet'])->nullable();
             $table->string('pekerjaan')->nullable();
-            $table->integer('tenor')->nullable(); // Lama cicilan jika kredit
+            $table->integer('tenor')->nullable();
             $table->date('tanggal_gatepass')->nullable();
-            $table->string('id_cabang'); // Relasi ke tabel branches (string)
-            $table->string('salesman')->nullable();
+            $table->string('model_mobil')->nullable();
+            $table->string('nomor_rangka')->nullable();
             $table->string('sumber_data')->nullable();
             $table->enum('progress', ['pending', 'tidak ada', 'SPK'])->default('pending');
             $table->text('alasan')->nullable();
             $table->timestamps();
 
             // Relasi ke tabel branches
-            $table->foreign('id_cabang')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreign('salesman_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

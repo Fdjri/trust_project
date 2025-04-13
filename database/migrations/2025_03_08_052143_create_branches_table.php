@@ -10,13 +10,14 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-    {
-        Schema::create('branches', function (Blueprint $table) {
-            $table->string('id')->primary(); // ID cabang sebagai string
-            $table->string('name');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('branches', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('region')->nullable();
+        $table->timestamps();
+    });
+}
 
 
     /**

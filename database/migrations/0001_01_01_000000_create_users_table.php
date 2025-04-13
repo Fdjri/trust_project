@@ -9,20 +9,24 @@ return new class extends Migration
  /**
      * Run the migrations.
      */
-    public function up()
-    {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('username')->unique(); // Menggunakan username untuk login
-            $table->string('email')->unique()->nullable();
-            $table->string('password');
-            $table->string('id_cabang')->nullable(); // Membuat id_cabang opsional
-            $table->foreign('id_cabang')->references('id')->on('branches')->onDelete('cascade');
-            $table->rememberToken();
-            $table->timestamps();
-        });
-    }
+    // database/migrations/xxxx_xx_xx_create_users_table.php
+public function up()
+{
+    Schema::create('users', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('branch_id')->nullable(); // hanya untuk kepala cabang, supervisor, salesman
+        $table->string('name');
+        $table->string('username')->unique();
+        $table->string('email')->unique()->nullable();
+        $table->string('password');
+        $table->enum('role', ['admin', 'kepala_cabang', 'supervisor', 'salesman']);
+        $table->rememberToken();
+        $table->timestamps();
+
+        $table->foreign('branch_id')->references('id')->on('branches')->onDelete('set null');
+    });
+}
+
 
     /**
      * Reverse the migrations.
