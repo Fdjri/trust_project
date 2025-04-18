@@ -5,22 +5,30 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * Menampilkan halaman login.
+     */
     public function create()
     {
         return view('auth.login');
     }
 
+    /**
+     * Memproses login user.
+     */
     public function store(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (!Auth::attempt($request->only('username', 'password'), $request->boolean('remember'))) {
             return back()->withErrors([
                 'username' => __('auth.failed'),
             ]);
@@ -28,26 +36,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return $this->redirectToDashboard();
-    }
-
-    public function redirectToDashboard()
-    {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'kepala_cabang') {
-            return redirect()->route('kc.dashboard');
-        } elseif ($user->role === 'supervisor') {
-            return redirect()->route('spv.dashboard');
-        } elseif ($user->role === 'salesman') {
-            return redirect()->route('sales.dashboard');
-        }
-
         return redirect()->route('dashboard');
     }
 
+    /**
+     * Logout user.
+     */
     public function destroy(Request $request)
     {
         Auth::logout();
@@ -55,6 +49,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('auth.login');
     }
 }

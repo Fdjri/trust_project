@@ -20,13 +20,9 @@ class AdminController extends Controller
         $this->middleware('role:admin');
     }
 
-    /**
-     * Menampilkan semua customer (hanya admin)
-     */
     public function index()
     {
-        $customers = Customer::with('branch')->get();
-        return view('admin.customers.index', compact('customers'));
+        return view('admin.dashboard');
     }
 
     /**

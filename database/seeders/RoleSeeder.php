@@ -8,31 +8,17 @@ use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
-        // Buat role
-        $admin = Role::create(['name' => 'admin']);
-        $kepalaCabang = Role::create(['name' => 'kepala_cabang']);
-        $supervisor = Role::create(['name' => 'supervisor']);
-        $salesman = Role::create(['name' => 'salesman']);
-
-        // Buat permission
-        $permissions = [
-            'manage users',
-            'manage customers',
-            'view dashboard',
-            'create order',
-            'approve order',
-        ];
-
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
-        }
-
-        // Berikan permission ke role
-        $admin->givePermissionTo(Permission::all());
-        $kepalaCabang->givePermissionTo(['view dashboard', 'manage customers']);
-        $supervisor->givePermissionTo(['view dashboard', 'approve order']);
-        $salesman->givePermissionTo(['view dashboard', 'create order']);
+        // Pastikan role belum ada sebelum membuatnya
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $kepalaCabangRole = Role::firstOrCreate(['name' => 'kepala_cabang', 'guard_name' => 'web']);
+        $supervisorRole = Role::firstOrCreate(['name' => 'supervisor', 'guard_name' => 'web']);
+        $salesmanRole = Role::firstOrCreate(['name' => 'salesman', 'guard_name' => 'web']);
     }
 }

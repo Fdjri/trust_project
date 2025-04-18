@@ -2,16 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController; // Pastikan ini ditambahkan
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\SalesController;
+use App\Http\Controllers\KcController;
+use App\Http\Controllers\SpvController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\FollowUpController;
 
-// 🏠 **Route Utama: Jika belum login, tampilkan login. Jika sudah login, ke dashboard sesuai role.**
+// 🏠 **Route Utama: Jika belum login, arahkan ke login. Jika sudah login, arahkan ke dashboard.**
 Route::get('/', function () {
-    return Auth::check() ? redirect()->route('dashboard') : view('auth.login'); 
-})->middleware('guest')->name('home');
+    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
+});
 
 // ✅ **Halaman Login**
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
@@ -22,66 +25,52 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
 // ✅ **Proses Logout**
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // 🎯 **Redirect Dashboard Sesuai Role**
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AuthenticatedSessionController::class, 'redirectToDashboard'])->name('dashboard');
-
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return view('layouts.admin.dashboard');
-        })->name('admin.dashboard');
+    
+    // Admin Routes
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::resource('customers', AdminController::class);
+        Route::get('/customers/export', [AdminController::class, 'export'])->name('admin.customers.export');
+        Route::post('/customers/import', [AdminController::class, 'import'])->name('admin.customers.import');
     });
 
-    Route::middleware(['role:kepala_cabang'])->group(function () {
-        Route::get('/kc/dashboard', function () {
-            return view('layouts.kc.dashboard');
-        })->name('kc.dashboard');
+    // KC (Kepala Cabang) Routes
+    Route::middleware('role:kepala_cabang')->prefix('kc')->group(function () {
+        Route::resource('customers', KcController::class);
+        Route::get('/laporan', [KcController::class, 'showLaporan'])->name('kc.laporan.index');
+        Route::get('/laporan/create/{customerId}', [KcController::class, 'createFollowUp'])->name('kc.laporan.create');
+        Route::post('/laporan/{customerId}', [KcController::class, 'storeFollowUp'])->name('kc.laporan.store');
     });
 
-    Route::middleware(['role:supervisor'])->group(function () {
-        Route::get('/spv/dashboard', function () {
-            return view('layouts.spv.dashboard');
-        })->name('spv.dashboard');
+    // SPV (Supervisor) Routes
+    Route::middleware('role:supervisor')->prefix('spv')->group(function () {
+        Route::get('/laporan', [SpvController::class, 'showLaporan'])->name('spv.laporan.index');
     });
 
-    Route::middleware(['role:salesman'])->group(function () {
-        Route::get('/sales/dashboard', function () {
-            return view('layouts.sales.dashboard');
-        })->name('sales.dashboard');
+    // Sales Routes
+    Route::middleware('role:salesman')->prefix('sales')->group(function () {
+        Route::get('/dashboard', [SalesController::class, 'dashboard'])->name('sales.dashboard');
+        Route::get('/cust', [SalesController::class, 'showCustomers'])->name('sales.cust.index');
+        Route::get('/cust/create', [SalesController::class, 'createCustomer'])->name('sales.cust.create');
+        Route::post('/cust', [SalesController::class, 'storeCustomer'])->name('sales.cust.store');
+        Route::get('/cust/edit/{id}', [SalesController::class, 'editCustomer'])->name('sales.cust.edit');
+        Route::put('/cust/{id}', [SalesController::class, 'updateCustomer'])->name('sales.cust.update');
+        Route::get('/cust/{id}', [SalesController::class, 'showCustomerDetail'])->name('sales.cust.show');
+        
+        // Laporan Follow-up
+        Route::get('/laporan', [SalesController::class, 'showFollowUp'])->name('sales.laporan.index');
+        Route::get('/laporan/create/{customerId}', [SalesController::class, 'createFollowUp'])->name('sales.laporan.create');
+        Route::post('/laporan/{customerId}', [SalesController::class, 'storeFollowUp'])->name('sales.laporan.store');
     });
-});
-
-// 🔐 **Fitur User yang Sudah Login**
-Route::middleware('auth')->group(function () {
+    
+    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// 👤 **Manajemen Pengguna (Hanya Admin)**
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::resource('users', UserController::class);
-    Route::get('/customers', [AdminController::class, 'index']);
-    Route::post('/customers', [AdminController::class, 'store']);
-    Route::put('/customers/{id}', [AdminController::class, 'update']);
-    Route::delete('/customers/{id}', [AdminController::class, 'destroy']);
-    Route::post('/customers/import', [AdminController::class, 'import']);
-    Route::get('/customers/export', [AdminController::class, 'export']);
-});
-
-// 📦 **Route untuk Customer (Bisa diakses oleh semua user yang sudah login)**
-Route::middleware('auth')->group(function () {
-    Route::get('/customers', [CustomerController::class, 'index']);
-    Route::post('/customers', [CustomerController::class, 'store']);
-    Route::put('/customers/{id_customer}', [CustomerController::class, 'update']);
-    Route::delete('/customers/{id_customer}', [CustomerController::class, 'destroy']);
-    Route::post('/import-customers', [CustomerController::class, 'import'])->name('customers.import');
-    Route::get('/export-customers', [CustomerController::class, 'export'])->name('customers.export');
-});
-
-// 🔑 **Autentikasi Routes (Login, Register, Logout, dll.)**
 require __DIR__.'/auth.php';
