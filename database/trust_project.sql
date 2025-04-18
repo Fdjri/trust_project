@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 18, 2025 at 04:34 AM
+-- Generation Time: Apr 18, 2025 at 06:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,6 +34,31 @@ CREATE TABLE `branches` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `branches`
+--
+
+INSERT INTO `branches` (`id`, `name`, `region`, `created_at`, `updated_at`) VALUES
+(1, 'TVBDG', 'BANDENGAN', NULL, NULL),
+(2, 'TVBKS', 'BEKASI', NULL, NULL),
+(3, 'TVBLP', 'HARMONI', NULL, NULL),
+(4, 'TVBTG', 'BITUNG', NULL, NULL),
+(5, 'TVBTL', 'BATU TULIS', NULL, NULL),
+(6, 'TVCLI', 'CILEUNGSI', NULL, NULL),
+(7, 'TVFWT', 'FATMAWATI', NULL, NULL),
+(8, 'TVKCI', 'KARAWACI', NULL, NULL),
+(9, 'TVKGV', 'KELAPA GADING V', NULL, NULL),
+(10, 'TVKJR', 'KEBON JERUK', NULL, NULL),
+(11, 'TVKLD', 'KLENDER', NULL, NULL),
+(12, 'TVKRW', 'KARAWANG', NULL, NULL),
+(13, 'TVMED', 'KELAPA GADING VSP', NULL, NULL),
+(14, 'TVPDG', 'PONDOK GEDE', NULL, NULL),
+(15, 'TVPDC', 'PONDOK CABE', NULL, NULL),
+(16, 'TVPIN', 'PONDOK INDAH', NULL, NULL),
+(17, 'TVTGR', 'TANGERANG', NULL, NULL),
+(18, 'TVYOS', 'YOS SUDARSO', NULL, NULL),
+(19, 'TRUST', 'TRADE IN', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -232,6 +257,16 @@ CREATE TABLE `model_has_roles` (
   `model_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `model_has_roles`
+--
+
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
+(5, 'App\\Models\\User', 1),
+(6, 'App\\Models\\User', 2),
+(7, 'App\\Models\\User', 3),
+(8, 'App\\Models\\User', 4);
+
 -- --------------------------------------------------------
 
 --
@@ -246,6 +281,17 @@ CREATE TABLE `permissions` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'manage users', 'web', '2025-04-17 20:26:27', '2025-04-17 20:26:27'),
+(2, 'manage customers', 'web', '2025-04-17 20:26:27', '2025-04-17 20:26:27'),
+(3, 'view dashboard', 'web', '2025-04-17 20:26:27', '2025-04-17 20:26:27'),
+(4, 'create order', 'web', '2025-04-17 20:26:27', '2025-04-17 20:26:27'),
+(5, 'approve order', 'web', '2025-04-17 20:26:27', '2025-04-17 20:26:27');
+
 -- --------------------------------------------------------
 
 --
@@ -259,6 +305,16 @@ CREATE TABLE `roles` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(5, 'admin', 'web', '2025-04-17 20:29:14', '2025-04-17 20:29:14'),
+(6, 'kepala_cabang', 'web', '2025-04-17 20:29:14', '2025-04-17 20:29:14'),
+(7, 'supervisor', 'web', '2025-04-17 20:29:14', '2025-04-17 20:29:14'),
+(8, 'salesman', 'web', '2025-04-17 20:29:14', '2025-04-17 20:29:14');
 
 -- --------------------------------------------------------
 
@@ -304,6 +360,16 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `branch_id`, `name`, `username`, `email`, `password`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Admin User', 'admin', 'admin@example.com', '$2y$12$Md5YuW0frVXyVC218PJDEeUMNXeBUQ5VTzFt0yo8DsX5DiZamGMDW', 'admin', NULL, '2025-04-17 20:30:32', '2025-04-17 20:30:32'),
+(2, NULL, 'Kepala Cabang', 'kepalacabang1', 'kc1@example.com', '$2y$12$TphFQp5ZrixULUuPqOjzkuFYYkwY8BgkhzFt0mdzgeFpPejz0Rcna', 'admin', NULL, '2025-04-17 20:30:32', '2025-04-17 20:30:32'),
+(3, NULL, 'Supervisor Cabang', 'supervisor1', 'supervisor1@example.com', '$2y$12$cQOtrJmRCBL903CLmPkQXec2uYTuhkOAOl3RvpyLi3YmT4xn4a8xe', 'admin', NULL, '2025-04-17 20:30:32', '2025-04-17 20:30:32'),
+(4, NULL, 'Salesman Cabang', 'salesman1', 'salesman1@example.com', '$2y$12$OfmDFKKRWPBmyj89.2OzgupCqMWSntKKCRKGFj5zFseuA.oaOCEoS', 'admin', NULL, '2025-04-17 20:30:32', '2025-04-17 20:30:32');
 
 --
 -- Indexes for dumped tables
@@ -437,7 +503,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `branches`
 --
 ALTER TABLE `branches`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -479,19 +545,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
